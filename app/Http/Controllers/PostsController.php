@@ -33,7 +33,11 @@ class PostsController extends Controller
 
         // dd(DB::getQueryLog());
 
-        return view('posts.index', ['posts' => BlogPost::all()]);
+        //comments_count
+
+        return view(
+            'posts.index', 
+            ['posts' => BlogPost::withCount('comments')->get()]);
     }
 
     /**
@@ -73,7 +77,7 @@ class PostsController extends Controller
     public function show($id)
     {
         // abort_if(!isset($this->posts[$id]), 404);
-        return view('posts.show', ['post' => BlogPost::findOrFail($id)]);
+        return view('posts.show', ['post' => BlogPost::with('comments')->findOrFail($id)]);
     }
 
     /**
