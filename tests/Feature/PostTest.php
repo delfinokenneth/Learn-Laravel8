@@ -2,9 +2,9 @@
 
 namespace Tests\Feature;
 
-use App\Models\BlogPost;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use App\Models\BlogPost;
 use App\Models\Comment;
 
 class PostTest extends TestCase
@@ -63,7 +63,8 @@ class PostTest extends TestCase
             'content' => 'At least 10 characters'
         ];
         
-        $this->post('/posts', $params)
+        $this->actingAs($this->user())
+            ->post('/posts', $params)
             ->assertStatus(302)
             ->assertSessionHas('status');
 
@@ -77,9 +78,10 @@ class PostTest extends TestCase
             'content' => 'x'
         ];
 
-        $this->post('/posts', $params)
-        ->assertStatus(302)
-        ->assertSessionHas('errors');
+        $this->actingAs($this->user())
+            ->post('/posts', $params)
+            ->assertStatus(302)
+            ->assertSessionHas('errors');
 
         $messages = session('errors')->getMessages();
         $this->assertEquals($messages['title'][0], 'The title must be at least 5 characters.');
@@ -101,9 +103,10 @@ class PostTest extends TestCase
            'content' => 'Content was changed'
        ];
 
-       $this->put("/posts/{$post->id}", $params)
-        ->assertStatus(302)
-        ->assertSessionHas('status');
+       $this->actingAs($this->user())
+            ->put("/posts/{$post->id}", $params)
+            ->assertStatus(302)
+            ->assertSessionHas('status');
 
        $this->assertEquals(session('status'), 'Blog post was updated!');
        $this->assertDatabaseMissing('blog_posts', $post->getAttributes());
@@ -117,9 +120,10 @@ class PostTest extends TestCase
         $post = $this->createDummyBlogPost();
 
         
-        $this->delete("/posts/{$post->id}")
-        ->assertStatus(302)
-        ->assertSessionHas('status');
+        $this->actingAs($this->user())
+            ->delete("/posts/{$post->id}")
+            ->assertStatus(302)
+            ->assertSessionHas('status');
 
         $this->assertEquals(session('status'), 'Blog post was deleted!');
         $this->assertDatabaseMissing('blog_posts', $post->getAttributes());
@@ -132,9 +136,7 @@ class PostTest extends TestCase
         // $post->title = 'New title';
         // $post->content = 'Content of the blog post';
         // $post->save();
-
         return BlogPost::factory()->states('new-title')->create();
-
         // return $post;
     }
 
