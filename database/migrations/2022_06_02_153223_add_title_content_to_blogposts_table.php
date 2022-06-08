@@ -11,14 +11,14 @@ class AddTitleContentToBlogpostsTable extends Migration
      */
     public function up()
     {
-        Schema::table('blog_posts', function (Blueprint $table) {
-            $table->string('title')->default('');
-            if (env('DB_CONNECTION') === 'sqlite_testing') {
-                $table->text('content')->default('');
-            } else {
-                $table->text('content');
-            }
-        });
+        // Schema::table('blog_posts', function (Blueprint $table) {
+        //     $table->string('title')->default('');
+        //     if (env('DB_CONNECTION') === 'sqlite_testing') {
+        //         $table->text('content')->default('');
+        //     } else {
+        //         $table->text('content');
+        //     }
+        // });
     }
 
     /**
@@ -26,9 +26,9 @@ class AddTitleContentToBlogpostsTable extends Migration
      */
     public function down()
     {
-        Schema::table('blog_posts', function (Blueprint $table) {
-            $table->dropColumn('title');
-            $table->dropColumn('content');
-        });
+        // Schema::table('blog_posts', function (Blueprint $table) {
+        //     $table->dropColumn('title');
+        //     $table->dropColumn('content');
+        // });
     }
 }
