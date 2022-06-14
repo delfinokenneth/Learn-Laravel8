@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StorePost;
 //use Illuminate\Http\StorePost;
 use App\Models\BlogPost;
+use App\Models\User;
 use Illuminate\Http\Request;
 // use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 
 class PostsController extends Controller
@@ -44,7 +46,13 @@ class PostsController extends Controller
 
         return view(
             'posts.index', 
-            ['posts' => BlogPost::withCount('comments')->get()]);
+            [
+                'posts' => BlogPost::latest()->withCount('comments')->get(),
+                'mostCommented' => BlogPost::mostCommented()->take(5)->get(),
+                'mostActive' => User::withMostBlogPosts()->take(5)->get(),
+                'mostActiveLastMonth' => User::withMostBlogPostsLastMonth()->take(5)->get(),
+            ]
+        );
     }
 
     /**
@@ -66,7 +74,7 @@ class PostsController extends Controller
     public function store(StorePost $request)
     {
         $validated = $request->validated();
-
+        $validated['user_id'] = $request->user()->id;
         $post = BlogPost::create($validated);
         // $post = new BlogPost();
         // $post->title = $validated['title'];
@@ -84,7 +92,15 @@ class PostsController extends Controller
     public function show($id)
     {
         // abort_if(!isset($this->posts[$id]), 404);
-        return view('posts.show', ['post' => BlogPost::with('comments')->findOrFail($id)]);
+        // return view('posts.show', 
+        //     ['post' => BlogPost::with(['comments' => function ($query) {
+        //         return $query->latest();
+        //     }])->findOrFail($id)
+        // ]);
+
+        return view('posts.show', 
+            ['post' => BlogPost::with('comments')->findOrFail($id)
+        ]);
     }
 
     /**
@@ -95,6 +111,8 @@ class PostsController extends Controller
      */
     public function edit($id)
     {
+        $post = BlogPost::findOrFail($id);
+        $this->authorize('update', $post);
         return view('posts.edit', ['post' => BlogPost::findOrFail($id)]);
     }
 
@@ -105,9 +123,14 @@ class PostsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
     public function update(StorePost $request, $id)
     {
         $post = BlogPost::findOrFail($id);
+        // if(Gate::denies('update-post', $post))
+        //     abort(403, "You can't edit this blogpost");
+        $this->authorize('update', $post);
+
         $validated = $request->validated();
         $post->fill($validated);
         $post->save();
@@ -126,6 +149,7 @@ class PostsController extends Controller
     public function destroy($id)
     {
         $post = BlogPost::findOrFail($id);
+        $this->authorize('delete', $post);
         $post->delete();
 
         session()->flash('status', 'Blog post was deleted!');

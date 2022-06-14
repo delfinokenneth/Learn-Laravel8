@@ -4,15 +4,24 @@
 @section('title', $post->title)
 
 @section('content')
-<h1>  {{ $post->title }}</h1>
+<h1>  
+    {{ $post->title }}
+        @component('components.badge', ['show' => now()->diffInMinutes($post->created_at) < 5]) 
+            Brand new Post! 
+        @endcomponent 
+</h1>
 <p> {{ $post->content }}</p>
 
-<p> Added {{ $post->created_at->diffForHumans() }}</p>
+{{-- <p class="text-muted"> 
+    Added {{ $post->created_at->diffForHumans() }}
+</p> --}}
 
 
-@if(now()->diffInMinutes($post->created_at) < 5)
-<div class="alert alert-info"> New! </div>
-@endif
+@component('components.updated', ['date' => $post->created_at, 'name' => $post->user->name]) 
+@endcomponent
+@component('components.updated', ['date' => $post->updated_at]) 
+    Updated
+@endcomponent
 
 <h4> Comments </h4>
 
@@ -20,11 +29,19 @@
     <p>
         {{  $comment->content }}
     </p>
-    <p class="text-muted">
+
+    @component('components.updated', ['date' => $comment->created_at]) 
+    @endcomponent
+
+    {{-- <p class="text-muted">
         added {{  $comment->created_at->diffForHumans()  }}
-    </p>
+    </p> --}}
 @empty
     <p> No Comments yet! </p>
 @endforelse
 
+
+
 @endsection
+
+
