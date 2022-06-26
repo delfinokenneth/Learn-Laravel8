@@ -19,6 +19,11 @@
 
 @endcomponent
 
+@component('components.tags', ['tags' => $post->tags])
+@endcomponent
+
+
+
 <div class="mb-3">
     <a href="{{ route('posts.show', ['post' => $post->id]) }}" class="btn btn-primary"> View </a>
 

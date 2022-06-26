@@ -6,3 +6,17 @@
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
+
+
+.navbar-laravel {
+    background-color: #fff;
+    box-shadow: 0 2px 4px (0, 0, 0, 0.04);
+}
+
+.fm-inline {
+    display: inline;
+}
+
+.badge-lg {
+    font-size: 1.0 rem;
+}

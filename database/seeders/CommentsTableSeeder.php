@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use App\Models\User;
 use App\Models\Comment;
 use App\Models\BlogPost;
 
@@ -23,11 +24,14 @@ class CommentsTableSeeder extends Seeder
             $this->command->info('There are no blog posts, so no comments will be added');
             return;
         }
-           
+
         $commentsCount = (int)$this->command->ask('How many comments would you like?', 20);
 
-        Comment::factory($commentsCount)->make()->each(function($comment) use ($posts) {
+        $users = User::all();
+
+        Comment::factory($commentsCount)->make()->each(function($comment) use ($posts, $users) {
             $comment->blog_post_id = $posts->random()->id;
+            $comment->user_id = $users->random()->id;
             $comment->save();
         });
     }
