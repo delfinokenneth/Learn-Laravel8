@@ -9,7 +9,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
-
+use Illuminate\Support\Facades\Storage;
 
 class PostsController extends Controller
 {
@@ -55,13 +55,35 @@ class PostsController extends Controller
     {
         $validated = $request->validated();
         $validated['user_id'] = $request->user()->id;
-        $post = BlogPost::create($validated);
+        $blogPost = BlogPost::create($validated);
         // $post = new BlogPost();
         // $post->title = $validated['title'];
         // $post->content = $validated['content'];
         // $post->save();
+        
+        $hasFile = $request->hasFile('thumbnail');
+
+        dump($hasFile);
+        
+        if($hasFile)
+        {
+            $file = $request->file('thumbnail');
+            dump($file);
+            dump($file->getClientMimeType());
+            dump($file->getClientOriginalExtension());
+
+            // dump($file->store('thumbnail'));
+            // dump(Storage::disc('public')->putFile('thumbnails', $file));
+
+            $name1 = $file->storeAs('thumbnails', $blogPost->id . '.' . $file->getExtension());
+            $name2 = Storage::putFileAs('thumbnails', $file, $blogPost->id . '.' . $file->guessExtension());
+            
+            dump(Storage::url($name1));
+            dump(Storage::disk('local'));
+        }
+
         $request->session()->flash('status','The blog post was created!');
-        return redirect()->route('posts.show', ['post' => $post->id]);
+        return redirect()->route('posts.show', ['post' => $blogPost->id]);
     }
     /**
      * Display the specified resource.
