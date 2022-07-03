@@ -15,7 +15,7 @@
     by {{  $post->user->name }}
 </p> --}}
 
-@component('components.updated', ['date' => $post->created_at, 'name' => $post->user->name]) 
+@component('components.updated', ['date' => $post->created_at, 'name' => $post->user->name, 'userId' => $post->user->id]) 
 
 @endcomponent
 
