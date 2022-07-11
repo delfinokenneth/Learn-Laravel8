@@ -163,7 +163,8 @@ class PostsController extends Controller
         $post = BlogPost::findOrFail($id);
         // if(Gate::denies('update-post', $post))
         //     abort(403, "You can't edit this blogpost");
-        $this->authorize('update', $post);
+        //$this->authorize('update', $post);
+        $this->authorize($post);
 
         $validated = $request->validated();
         $post->fill($validated);
@@ -200,13 +201,14 @@ class PostsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         $post = BlogPost::findOrFail($id);
-        $this->authorize('delete', $post);
+        //$this->authorize('delete', $post);
+        $this->authorize($post);
         $post->delete();
 
-        session()->flash('status', 'Blog post was deleted!');
+        $request->session()->flash('status', 'Blog post was deleted!');
 
         return redirect()->route('posts.index');
     }
