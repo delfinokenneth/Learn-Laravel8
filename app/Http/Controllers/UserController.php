@@ -77,8 +77,12 @@ class UserController extends Controller
      */
     public function update(UpdateUser $request, User $user)
     {
+
+        //  dd($request->all(), $request->hasFile('avatar'), $request->file('avatar'),  $request->hasFile(''), $request->allFiles(), $request->exists('avatar'));
+
         if ($request->hasFile('avatar'))
         {
+
             $path = $request->file('avatar')->store('avatars');
 
             if ($user->image)

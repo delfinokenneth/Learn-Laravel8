@@ -54,15 +54,15 @@ class PostsController extends Controller
      */
     public function store(StorePost $request)
     {
-        $validated = $request->validated();
-        $validated['user_id'] = $request->user()->id;
-        $blogPost = BlogPost::create($validated);
+        $validatedData = $request->validated();
+        $validatedData['user_id'] = $request->user()->id;
+        $blogPost = BlogPost::create($validatedData);
 
         if($request->hasFile('thumbnail'))
         {
             $path = $request->file('thumbnail')->store('thumbnails');
             $blogPost->image()->save(
-                Image::create(['path' => $path]),
+                Image::make(['path' => $path]),
             );
         }
     
@@ -166,8 +166,8 @@ class PostsController extends Controller
         //$this->authorize('update', $post);
         $this->authorize($post);
 
-        $validated = $request->validated();
-        $post->fill($validated);
+        $validatedData = $request->validated();
+        $post->fill($validatedData);
 
         if($request->hasFile('thumbnail'))
         {
