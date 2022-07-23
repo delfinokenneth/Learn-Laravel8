@@ -33,7 +33,8 @@ class AppServiceProvider extends ServiceProvider
         Blade::aliasComponent('components.tags', 'tags');
         Blade::aliasComponent('components.tags', 'tags');
         Blade::aliasComponent('components.errors', 'errors');
-
+        Blade::aliasComponent('components.comment-form', 'commentForm');
+        Blade::aliasComponent('components.comment-list', 'commentList');
         view()->composer(['posts.index', 'posts.show'], ActivityComposer::class);
     }
 }

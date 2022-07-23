@@ -45,25 +45,12 @@
 
     <h4> Comments </h4>
 
-    @include('comments._form')
+    @component('components.comment-form', ['route' => route('posts.comments.store', ['post' => $post->id])])
+    @endcomponent
 
-    @forelse($post->comments as $comment)
-        <p>
-            {{  $comment->content }}
-        </p>
+    @component('components.comment-List', ['comments' => $post->comments])
+    @endcomponent
 
-        {{-- {{ dd($comment->user->name) }} --}}
-
-        @component('components.updated', ['date' => $comment->created_at, 'name' => $comment->user->name]) 
-        @endcomponent
-
-
-        {{-- <p class="text-muted">
-            added {{  $comment->created_at->diffForHumans()  }}
-        </p> --}}
-        @empty
-            <p> No Comments yet! </p>
-        @endforelse
 
     </div>
     <div class="col-4">

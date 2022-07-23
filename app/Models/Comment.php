@@ -2,6 +2,7 @@
 
 namespace App\Models;
 use App\Scopes\LatestScope;
+use App\Traits\Taggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -12,7 +13,7 @@ class Comment extends Model
 {
     use HasFactory;
 
-    use SoftDeletes;
+    use SoftDeletes, Taggable;
 
     protected $fillable = ['user_id', 'content'];
 
@@ -34,6 +35,7 @@ class Comment extends Model
         return $this->belongsTo(User::class);
     }
 
+
     public function scopeLatest(Builder $query)
     {
         return $query->orderBy(static::CREATED_AT, 'desc');
@@ -44,6 +46,9 @@ class Comment extends Model
         parent::boot();
 
         static::creating(function (Comment $comment) {
+            // dump($comment);
+            // dd(BlogPost::class);
+
             if($comment->commentable_type === BlogPost::class);
             Cache::tags(['blog-post'])->forget("blog-post-{$comment->commentable_id}");
             Cache::tags(['blog-post'])->forget("mostCommented");
