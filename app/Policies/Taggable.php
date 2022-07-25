@@ -1,8 +1,7 @@
 <?php
 
 namespace App\Traits;
-
-use App\Models\Tag;
+namespace App\Models;
 
 trait Taggable {
 

@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Models;
-namespace App\Traits;
 
 use App\Scopes\LatestScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -9,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Builder;
 use App\Scopes\DeletedAdminScope;
-
+use App\Traits\Taggable;
 use Illuminate\Support\Facades\Cache;
 
 class BlogPost extends Model

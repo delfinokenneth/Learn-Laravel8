@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StorePost;
-//use Illuminate\Http\StorePost;
 use App\Models\BlogPost;
-use App\Models\Image;
-use App\Models\User;
-use Illuminate\Support\Facades\Cache;
+use App\Http\Requests\StorePost;
 use Illuminate\Http\Request;
+//use Illuminate\Http\StorePost;
+
+use App\Models\Image;
+use Illuminate\Support\Facades\Cache;
+
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 
@@ -24,6 +25,7 @@ class PostsController extends Controller
     {
         $this->middleware('auth')
             ->only(['create', 'store', 'edit', 'update', 'destory']);
+
     }
 
     public function index()

@@ -1,9 +1,8 @@
 <?php
 
 namespace App\Models;
-use App\Traits\Taggable;
-
 use App\Scopes\LatestScope;
+use App\Traits\Taggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
