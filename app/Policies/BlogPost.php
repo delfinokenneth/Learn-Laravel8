@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Policies;
 
 use App\Scopes\LatestScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

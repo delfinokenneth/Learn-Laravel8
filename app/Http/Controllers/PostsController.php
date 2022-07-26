@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\BlogPost;
+
 use App\Http\Requests\StorePost;
+
 use Illuminate\Http\Request;
 //use Illuminate\Http\StorePost;
 
+use App\Models\BlogPost;
 use App\Models\Image;
+
+
 use Illuminate\Support\Facades\Cache;
 
 use Illuminate\Support\Facades\Gate;
@@ -30,6 +34,8 @@ class PostsController extends Controller
 
     public function index()
     {
+        // dd(BlogPost::class->latestWithRelations()->get());
+
         return view(
             'posts.index', 
             [
@@ -58,7 +64,7 @@ class PostsController extends Controller
     {
         $validatedData = $request->validated();
         $validatedData['user_id'] = $request->user()->id;
-        $blogPost = BlogPost::create($validatedData);
+        $blogPost = Models\BlogPost::create($validatedData);
 
         if($request->hasFile('thumbnail'))
         {
@@ -87,7 +93,7 @@ class PostsController extends Controller
         //     }])->findOrFail($id)
         // ]);
         $blogPost = Cache::tags(['blog-post'])->remember("blog-post-{$id}", 60, function() use($id) {
-            return BlogPost::with('comments', 'tags', 'user', 'comments.user')
+            return Models\BlogPost::with('comments', 'tags', 'user', 'comments.user')
                 ->findOrFail($id);
         });
 
@@ -147,9 +153,9 @@ class PostsController extends Controller
      */
     public function edit($id)
     {
-        $post = BlogPost::findOrFail($id);
+        $post = Models\BlogPost::findOrFail($id);
         $this->authorize('update', $post);
-        return view('posts.edit', ['post' => BlogPost::findOrFail($id)]);
+        return view('posts.edit', ['post' => Models\BlogPost::findOrFail($id)]);
     }
 
     /**
@@ -162,7 +168,7 @@ class PostsController extends Controller
 
     public function update(StorePost $request, $id)
     {
-        $post = BlogPost::findOrFail($id);
+        $post = Models\BlogPost::findOrFail($id);
         // if(Gate::denies('update-post', $post))
         //     abort(403, "You can't edit this blogpost");
         //$this->authorize('update', $post);
@@ -205,7 +211,7 @@ class PostsController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $post = BlogPost::findOrFail($id);
+        $post = Models\BlogPost::findOrFail($id);
         //$this->authorize('delete', $post);
         $this->authorize($post);
         $post->delete();
