@@ -2,17 +2,18 @@
 
 namespace App\Mail;
 
-use App\Models\Comment;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use App\Models\Comment;
 
 class CommentPosted extends Mailable
 {
     use Queueable, SerializesModels;
 
     public $comment;
+
     /**
      * Create a new message instance.
      *
@@ -30,10 +31,8 @@ class CommentPosted extends Mailable
      */
     public function build()
     {
-        
-        $subject = 'Comment was posted on your blog post {$this->comment->commentable->title} blog post';
+        $subject = "Commented was posted on your {$this->comment->commentable->title} blog post";
         return $this->subject($subject)
-        ->view('emails.posts.commented');
-
+            ->view('emails.posts.commented');
     }
 }
