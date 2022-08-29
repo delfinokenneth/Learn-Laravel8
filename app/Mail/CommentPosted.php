@@ -34,7 +34,10 @@ class CommentPosted extends Mailable
         $subject = "Commented was posted on your {$this->comment->commentable->title} blog post";
         return $this
             ->attach(
-                storage_path('app/public') . '/' . $this->comment->user->image->path
+                storage_path('app/public') . '/' . $this->comment->user->image->path,
+                [
+                    'as' => 'profile_picture.jpeg',
+                ]
             )
             ->subject($subject)
             ->view('emails.posts.commented');
