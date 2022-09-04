@@ -1,9 +1,11 @@
 @component('mail::message')
-# Introduction
+# Comment was posted on your blogpost
 
-Hello from markdown!
+Hi {{  $comment->commentable->user->name }}
 
-@component('mail::button', ['url' => ''])
+Someone has commented on your blogpost
+
+@component('mail::button', ['url' => route('posts.show', ['post' => $comment->commentable->id])])
 Button Text
 @endcomponent
 
