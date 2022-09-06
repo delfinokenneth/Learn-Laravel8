@@ -50,6 +50,11 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
+Route::get('mailable', function(){
+    $comment = App\Models\Comment::find(1);
+    return new App\Mail\CommentPostedMarkdown($comment);
+});
+
 
     //->only(['index', 'show', 'create', 'store', 'edit', 'update']);
 
